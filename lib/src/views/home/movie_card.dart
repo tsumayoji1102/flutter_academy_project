@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../../model/movie_model.dart';
-import '../datail/detail_view.dart';
+import '../../util/paths.dart';
+import '../datail/detail_page.dart';
 
 class MovieCard extends StatelessWidget {
   const MovieCard({required this.movie, Key? key}) : super(key: key);
@@ -35,10 +37,24 @@ class MovieCard extends StatelessWidget {
           child: Row(
             children: [
               // 画像
-              Container(
+              SizedBox(
                 height: 80,
                 width: 80,
-                color: Colors.purple,
+                //color: Colors.purple,
+                child: movie.posterPath!.isNotEmpty
+                    ? CachedNetworkImage(
+                        fit: BoxFit.fitWidth,
+                        progressIndicatorBuilder: (context, url, progress) =>
+                            Center(
+                          child: CircularProgressIndicator(
+                            value: progress.progress,
+                          ),
+                        ),
+                        imageUrl: Paths.movieImageUrl(movie.posterPath),
+                        errorWidget: (a, b, c) =>
+                            Image.asset('lib/assets/movie.png'),
+                      )
+                    : Image.asset('lib/assets/movie.png'),
               ),
               // 紹介
               Expanded(

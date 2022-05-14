@@ -1,7 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../model/movie_model.dart';
+import '../../util/paths.dart';
 
 class DetailView extends StatelessWidget {
   const DetailView({required this.movie, Key? key}) : super(key: key);
@@ -18,11 +20,25 @@ class DetailView extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                margin: const EdgeInsets.all(10),
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 child: Container(
                   color: Colors.purple,
-                  width: MediaQuery.of(context).size.width - 20,
-                  height: 300,
+                  width: double.infinity,
+                  height: 500,
+                  child: movie.posterPath!.isNotEmpty
+                      ? CachedNetworkImage(
+                          fit: BoxFit.fitWidth,
+                          progressIndicatorBuilder: (context, url, progress) =>
+                              Center(
+                            child: CircularProgressIndicator(
+                              value: progress.progress,
+                            ),
+                          ),
+                          imageUrl: Paths.movieImageUrl(movie.posterPath),
+                          errorWidget: (a, b, c) =>
+                              Image.asset('lib/assets/movie.png'),
+                        )
+                      : Image.asset('lib/assets/movie.png'),
                 ),
               ),
               Container(
@@ -39,9 +55,7 @@ class DetailView extends StatelessWidget {
               Container(
                 height: 200,
                 margin: const EdgeInsets.symmetric(horizontal: 20),
-                child: Flexible(
-                  child: Text(movie.fetchOverView()),
-                ),
+                child: Text(movie.fetchOverView()),
               )
             ],
           ),
@@ -50,7 +64,7 @@ class DetailView extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        child: const Icon(Icons.circle),
       ),
     );
   }

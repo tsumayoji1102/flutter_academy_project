@@ -25,7 +25,7 @@ class Movie {
     originalTitle = json['original_title'];
     overview = json['overview'];
     popularity = json['popularity'].toDouble();
-    posterPath = json['poster_path'];
+    posterPath = json['poster_path'] ?? '';
     releaseDate = json['release_date'];
     title = json['title'];
     video = json['video'];

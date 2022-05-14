@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "945614426157",
+    "project_id": "tmdb-project-1c485",
+    "storage_bucket": "tmdb-project-1c485.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:945614426157:android:256301ebcfe3ffc0af68a4",
+        "android_client_info": {
+          "package_name": "com.shiomi.tmdb_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "945614426157-29jh5ap4o8rmhrk4746cg652fkvoidt7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDm2VSSz9S0ZCwPz6L2qaeqlhA5iv8GKE0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "945614426157-29jh5ap4o8rmhrk4746cg652fkvoidt7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
