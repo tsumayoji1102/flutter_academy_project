@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ErrorDialog extends StatelessWidget {
@@ -11,31 +12,28 @@ class ErrorDialog extends StatelessWidget {
   final String message;
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 30),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Align(
-              alignment: Alignment.center,
-              child: Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 18,
-                ),
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 20),
-              child: Text(
-                message,
-              ),
-            ),
-          ],
+    return CupertinoAlertDialog(
+      title: Align(
+        alignment: Alignment.center,
+        child: Text(
+          title,
+          style: const TextStyle(
+            fontSize: 18,
+          ),
         ),
       ),
+      content: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        child: Text(
+          message,
+        ),
+      ),
+      actions: [
+        CupertinoDialogAction(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('OK'),
+        ),
+      ],
     );
   }
 }

@@ -1,9 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../views/setting/setting_view_model.dart';
+import '../login/login_page.dart';
 
-class SettingPage extends StatelessWidget {
+class SettingPage extends ConsumerWidget {
+  const SettingPage({Key? key}) : super(key: key);
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final viewModel = ref.watch(settingViewModelProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -19,22 +24,31 @@ class SettingPage extends StatelessWidget {
             const SizedBox(
               height: 40,
             ),
-            SettingCell(
-              title: 'テーマカラーの変更',
-              onTap: () {},
-              rightWidget: Container(
-                height: 25,
-                width: 25,
-                decoration: BoxDecoration(
-                  color: Colors.lightBlue,
-                  borderRadius: BorderRadius.circular(12.5),
-                ),
-              ),
-            ),
+            // SettingCell(
+            //   title: 'テーマカラーの変更',
+            //   onTap: () {},
+            //   child: Container(
+            //     height: 25,
+            //     width: 25,
+            //     decoration: BoxDecoration(
+            //       color: Colors.lightBlue,
+            //       borderRadius: BorderRadius.circular(12.5),
+            //     ),
+            //   ),
+            // ),
             // ログアウト
             SettingCell(
               title: 'ログアウト',
-              onTap: () {},
+              onTap: () async {
+                viewModel.setIsProgress(true);
+                await viewModel.logOut();
+                viewModel.setIsProgress(false);
+                await Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => const LoginPage()),
+                  (route) => false,
+                );
+              },
             ),
           ],
         ),
@@ -44,16 +58,16 @@ class SettingPage extends StatelessWidget {
 }
 
 class SettingCell extends StatelessWidget {
-  SettingCell({
+  const SettingCell({
     Key? key,
     required this.title,
     required this.onTap,
-    this.rightWidget,
+    this.child,
   }) : super(key: key);
 
   final String title;
   final Function onTap;
-  final Widget? rightWidget;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +84,7 @@ class SettingCell extends StatelessWidget {
         width: double.infinity,
         child: Container(
           margin: const EdgeInsets.only(left: 10),
-          child: rightWidget != null
+          child: child != null
               ? Stack(
                   children: [
                     Text(
@@ -80,7 +94,7 @@ class SettingCell extends StatelessWidget {
                     Container(
                       margin: const EdgeInsets.only(right: 20),
                       alignment: Alignment.centerRight,
-                      child: rightWidget,
+                      child: child,
                     )
                   ],
                 )

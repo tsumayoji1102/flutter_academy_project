@@ -6,14 +6,14 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'home_page_view_model.dart';
 import 'movie_card.dart';
 
-class HomePage extends ConsumerStatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomePageView extends ConsumerStatefulWidget {
+  const HomePageView({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _HomePageViewState createState() => _HomePageViewState();
 }
 
-class _HomePageState extends ConsumerState<HomePage> {
+class _HomePageViewState extends ConsumerState<HomePageView> {
   late TextEditingController _searchTextController;
   late ScrollController _scrollController;
 
@@ -81,7 +81,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                           );
                           // 追加のボタンを表示
                         } else if (index == viewModel.movies.length + 1) {
-                          if (viewModel.movies.length % 20 == 0) {
+                          if (viewModel.movies.length % 20 == 0 ||
+                              !(viewModel.isNoNextPage)) {
                             return GestureDetector(
                               onTap: () async {
                                 await viewModel.addNewMovies();
@@ -90,11 +91,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                                 color: Colors.white,
                                 width: double.infinity,
                                 height: 60,
-                                child: const Center(
-                                  child: Text(
-                                    'さらに表示',
-                                    style: TextStyle(color: Colors.blue),
-                                  ),
+                                child: Center(
+                                  child: viewModel.isMiniProgress
+                                      ? const CircularProgressIndicator()
+                                      : const Text(
+                                          '次を表示',
+                                          style: TextStyle(
+                                              color: Colors.lightBlue),
+                                        ),
                                 ),
                               ),
                             );

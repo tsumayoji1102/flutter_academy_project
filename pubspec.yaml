@@ -26,6 +26,7 @@ dependencies:
 
   # firebase系
   firebase_auth: ^3.3.18
+  cloud_firestore: ^3.1.15
   firebase_core: ^1.17.0
 
   # 見た目系

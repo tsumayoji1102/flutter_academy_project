@@ -22,15 +22,25 @@ class HomeViewModel extends ChangeNotifier {
   bool _isProgress = false;
   bool get isProgress => _isProgress;
 
-  /// 状態を更新はしない（今のところ）
-  void setLastSearch(String text, int pageIndex) {
-    lastSearchText = text;
-    this.pageIndex = pageIndex;
+  // 状態（ツギヲヒョウジ）
+  bool _isMiniProgress = false;
+  bool get isMiniProgress => _isMiniProgress;
+  bool isNoNextPage = false;
+
+  void setIsMiniProgress(bool isProgress) {
+    _isMiniProgress = isProgress;
+    notifyListeners();
   }
 
   void setIsProgress(bool isProgress) {
     _isProgress = isProgress;
     notifyListeners();
+  }
+
+  /// 状態を更新はしない（今のところ）
+  void setLastSearch(String text, int pageIndex) {
+    lastSearchText = text;
+    this.pageIndex = pageIndex;
   }
 
   void updateScreen() {
@@ -68,8 +78,12 @@ class HomeViewModel extends ChangeNotifier {
         return;
       }
       setIsProgress(true);
+      isNoNextPage = false;
       final movies = await _fetchTmdbData(title, 1);
       this.movies = movies;
+      if (movies.length < 20) {
+        isNoNextPage = true;
+      }
       // 最終検索結果を保持しておく
       setLastSearch(title, 1);
       notifyListeners();
@@ -83,10 +97,14 @@ class HomeViewModel extends ChangeNotifier {
 
   Future<void> addNewMovies() async {
     try {
-      setIsProgress(true);
+      setIsMiniProgress(true);
       pageIndex++;
       final movies = await _fetchTmdbData(lastSearchText, pageIndex);
       this.movies += movies;
+      // 20以下だったら次なし
+      if (movies.length < 20) {
+        isNoNextPage = true;
+      }
       // 最終検索を保持しておく
       setLastSearch(lastSearchText, pageIndex);
       notifyListeners();
@@ -94,7 +112,7 @@ class HomeViewModel extends ChangeNotifier {
       Log.error(e);
       rethrow;
     } finally {
-      setIsProgress(false);
+      setIsMiniProgress(false);
     }
   }
 }
