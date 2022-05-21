@@ -133,7 +133,8 @@ class NoMovieScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(
+          Container(
+            margin: const EdgeInsets.only(right: 10),
             width: 250,
             child: Image.asset(
               'lib/assets/topgun2.png',
@@ -144,7 +145,7 @@ class NoMovieScreen extends StatelessWidget {
             height: 10,
           ),
           const Text(
-            '早速映画を検索\nしてみよう！',
+            '早速映画を検索してみよう！',
             style: TextStyle(
                 color: Colors.black38,
                 fontSize: 20,
