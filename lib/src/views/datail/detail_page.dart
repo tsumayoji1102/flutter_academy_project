@@ -132,6 +132,7 @@ class DetailView extends ConsumerWidget {
               );
             }),
           );
+          await viewModel.fetchComments(movie.id.toString());
         },
         tooltip: 'Increment',
         child: const Icon(Icons.announcement),

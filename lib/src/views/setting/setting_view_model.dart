@@ -21,5 +21,9 @@ class SettingViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  String get userName => _authService.displayName;
+
+  Future<void> updateName(String name) => _authService.updateName(name);
+
   Future<void> logOut() => _authService.logOut();
 }

@@ -3,11 +3,32 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../views/setting/setting_view_model.dart';
 import '../login/login_page.dart';
 
-class SettingPage extends ConsumerWidget {
-  const SettingPage({Key? key}) : super(key: key);
+class SettingPage extends ConsumerStatefulWidget {
+  const SettingPage({Key? key, required this.userName}) : super(key: key);
+
+  final String userName;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _SettingPageState createState() => _SettingPageState();
+}
+
+class _SettingPageState extends ConsumerState<SettingPage> {
+  late TextEditingController _nameController;
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController = TextEditingController(text: widget.userName);
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final viewModel = ref.watch(settingViewModelProvider);
     return Scaffold(
       appBar: AppBar(
@@ -36,6 +57,20 @@ class SettingPage extends ConsumerWidget {
             //     ),
             //   ),
             // ),
+            // 名前変更
+            SettingCell(
+              title: '名前の変更',
+              onTap: () {},
+              child: SizedBox(
+                width: 200,
+                child: TextField(
+                  controller: _nameController,
+                  onChanged: (value) async {
+                    await viewModel.updateName(value);
+                  },
+                ),
+              ),
+            ),
             // ログアウト
             SettingCell(
               title: 'ログアウト',

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tmdb_project/src/service/firebase_auth_service.dart';
 import 'views/setting/setting_page.dart';
 
 import 'views/home/home_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final authService = ref.watch(firebaseAuthServiceProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -23,7 +26,9 @@ class HomePage extends StatelessWidget {
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => SettingPage(),
+                  builder: (_) => SettingPage(
+                    userName: authService.displayName,
+                  ),
                 ),
               ),
               child: const Icon(Icons.settings),
@@ -34,11 +39,11 @@ class HomePage extends StatelessWidget {
       body: const Center(
         child: HomePageView(),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _incrementCounter(),
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () => _incrementCounter(),
+      //   tooltip: 'Increment',
+      //   child: const Icon(Icons.add),
+      // ),
     );
   }
 
