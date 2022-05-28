@@ -3,15 +3,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'package:http/retry.dart';
 import '../../model/movie_model.dart';
+import '../../service/tmdb_service.dart';
 import '../../util/log.dart';
-import 'home_page_view_model.dart';
 
-final homePageViewModelProvider =
-    ChangeNotifierProvider<HomeViewModel>((ref) => HomeViewModel());
+final homePageViewModelProvider = ChangeNotifierProvider<HomeViewModel>(
+  (ref) => HomeViewModel(
+    ref.watch(tmdbServiceProvider),
+  ),
+);
 
 class HomeViewModel extends ChangeNotifier {
+  HomeViewModel(this._tmdbService);
+  final TMDBService _tmdbService;
+
   List<Movie> movies = [];
 
   // 検索で保持しておく値
@@ -47,29 +52,6 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// 映画リストを取得し、返す
-  Future<List<Movie>> _fetchTmdbData(String title, int pageIndex) async {
-    try {
-      final results = await http.get(
-        Uri.parse(
-            'https://api.themoviedb.org/3/search/movie?api_key=c4470d4ccd101e384cf2b432a14777ed&language=ja&region=JP&query=$title&page=$pageIndex'),
-      );
-      print(results);
-      final parsed = jsonDecode(results.body);
-      print(parsed);
-      final movieResults = parsed['results'] as List<dynamic>;
-      print('count: ${movieResults.length}');
-      final movies = movieResults.map((data) => Movie.fromJson(data)).toList();
-      print('success');
-      return movies;
-    } catch (e) {
-      print('Error in fetchData(): $e');
-      rethrow;
-    } finally {
-      setIsProgress(false);
-    }
-  }
-
   /// 新規での検索はここから行う。
   Future<void> searchNewMovies(String title) async {
     try {
@@ -79,7 +61,7 @@ class HomeViewModel extends ChangeNotifier {
       }
       setIsProgress(true);
       isNoNextPage = false;
-      final movies = await _fetchTmdbData(title, 1);
+      final movies = await _tmdbService.fetchTmdbData(title, 1);
       this.movies = movies;
       if (movies.length < 20) {
         isNoNextPage = true;
@@ -99,7 +81,8 @@ class HomeViewModel extends ChangeNotifier {
     try {
       setIsMiniProgress(true);
       pageIndex++;
-      final movies = await _fetchTmdbData(lastSearchText, pageIndex);
+      final movies =
+          await _tmdbService.fetchTmdbData(lastSearchText, pageIndex);
       this.movies += movies;
       // 20以下だったら次なし
       if (movies.length < 20) {

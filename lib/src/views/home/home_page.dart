@@ -142,7 +142,7 @@ class NoMovieScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(
-            height: 10,
+            height: 20,
           ),
           const Text(
             '早速映画を検索してみよう！',

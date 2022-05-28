@@ -62,12 +62,14 @@ class _SettingPageState extends ConsumerState<SettingPage> {
               title: '名前の変更',
               onTap: () {},
               child: SizedBox(
-                width: 200,
+                width: 150,
+                height: 25,
                 child: TextField(
                   controller: _nameController,
                   onChanged: (value) async {
                     await viewModel.updateName(value);
                   },
+                  maxLines: 1,
                 ),
               ),
             ),
@@ -118,7 +120,7 @@ class SettingCell extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 15),
         width: double.infinity,
         child: Container(
-          margin: const EdgeInsets.only(left: 10),
+          margin: const EdgeInsets.only(left: 10, right: 20),
           child: child != null
               ? Stack(
                   children: [
@@ -127,7 +129,6 @@ class SettingCell extends StatelessWidget {
                       style: const TextStyle(fontSize: 16),
                     ),
                     Container(
-                      margin: const EdgeInsets.only(right: 20),
                       alignment: Alignment.centerRight,
                       child: child,
                     )
